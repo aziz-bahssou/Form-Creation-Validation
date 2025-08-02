@@ -1,48 +1,45 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const myForm = document.getElementById('registration-form');
-    const nameInput = document.getElementById('username');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const feedBack = document.getElementById('form-feedback');
+    const form = document.getElementById('registration-form');
+    const feedbackDiv = document.getElementById('form-feedback');
 
-    myForm.addEventListener('submit', (e) => {
-        e.preventDefault();
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        // Retrieve and trim inputs
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
 
         let isValid = true;
-        let message = [];
+        let messages = [];
 
         // Username validation
-        if (nameInput.value.length < 3) {
+        if (username.length < 3) {
             isValid = false;
-            message.push("Username must be at least 3 characters long.");
+            messages.push("Username must be at least 3 characters long.");
         }
 
-        // Email validation (regex)
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(emailInput.value)) {
+        // Email validation
+        if (!email.includes('@') || !email.includes('.')) {
             isValid = false;
-            message.push('Please enter a valid email address.');
+            messages.push("Email must contain '@' and '.'.");
         }
 
         // Password validation
-        if (passwordInput.value.length < 8) {
+        if (password.length < 8) {
             isValid = false;
-            message.push("Password must be at least 8 characters long.");
+            messages.push("Password must be at least 8 characters long.");
         }
 
-        feedBack.style.display = 'block';
+        // Feedback display
+        feedbackDiv.style.display = 'block';
 
-        if (!isValid) {
-            feedBack.innerHTML = message.join('<br>');
-            feedBack.style.color = '#dc3545';
+        if (isValid) {
+            feedbackDiv.textContent = "Registration successful!";
+            feedbackDiv.style.color = "#28a745";
         } else {
-            feedBack.textContent = "Registration successful!";
-            feedBack.style.color = '#28a745';
+            feedbackDiv.innerHTML = messages.join('<br>');
+            feedbackDiv.style.color = "#dc3545";
         }
-
-        setTimeout(() => {
-            feedBack.textContent = '';
-            feedBack.style.display = 'none';
-        }, 3000);
     });
 });
